@@ -524,17 +524,10 @@ class EpeverChargeController(minimalmodbus.Instrument):
 
         self.write_registers(0x9013, [reg_ms, reg_hd, reg_my])
 
-    def set_discharge_enable(self, discharge_enable):
+    def set_discharge_enable(self, enable):
         """
         Turns discharge on or off
         :param discharge_enable: 1 or 0 (on or off)
         :return: None
         """
-        register_value = self.retriable_read_register(0x3202, 0, 4)
-        discharge_mask = 1 << 0
-        register_value &= ~discharge_mask
-        
-        if discharge_enable:
-            register_value |= discharge_mask
-            
-        self.write_register(0x3202, register_value, 0, 6)
+        self.write_bit(0x2, enable, 5)
